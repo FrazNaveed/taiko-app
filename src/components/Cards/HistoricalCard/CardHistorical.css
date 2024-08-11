@@ -1,0 +1,106 @@
+.card {
+  background-color: var(--card-background); /* Background color for cards */
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  height: 300px;
+  width: 260px;
+  border: 1px solid var(--card-border);
+}
+
+.card-heading span {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.card .card-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
+.card-body {
+  border: 2px solid var(--green-color);
+  border-radius: 12px;
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.card-body .card-body_price-font span {
+  font-size: 0.8rem;
+}
+
+.card_body_round-result {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.card_body_round-result .round-price {
+  color: var(--red-color);
+  font-weight: bold;
+  font-size: 26px;
+  text-decoration: underline; /* Add underline */
+  text-decoration-style: dotted; /* Make the underline dotted */
+}
+
+.card_body_round-result .round-difference {
+  background-color: var(--red-color);
+  border-radius: 5px;
+  width: 90px;
+  height: 30px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.card_body_locked-price {
+  display: flex;
+  justify-content: space-between;
+}
+.card_body_prize-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-body .card_body_locked-price span {
+  font-size: 0.8rem;
+}
+
+.card_body_prize-section span {
+  font-weight: bold;
+  color: var(--card-body-font);
+  font-size: 1rem;
+}
+
+.multiplier-arrow-up-historical {
+  background-color: var(--disable-color);
+  display: flex;
+  justify-content: center;
+  border-radius: 10px 10px 0 0;
+  padding: 10px;
+  width: 60%;
+}
+
+.multiplier-arrow-up-historical span {
+  font-weight: bold;
+}
+
+.multiplier-arrow-down-historical {
+  background-color: var(--red-color);
+  display: flex;
+  justify-content: center;
+  border-radius: 0 0 10px 10px;
+  padding: 10px;
+  width: 60%;
+}
+
+.multiplier-arrow-down-historical span {
+  font-weight: bold;
+}

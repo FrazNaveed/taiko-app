@@ -6,3 +6,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+:root {
+  --green-color: #279927;
+  --red-color: rgb(201, 47, 47);
+  --disable-color: grey;
+  --card-background: #201820;
+  --card-border: #4b0012;
+  --card-body-font: white;
+}

@@ -1,0 +1,11 @@
+.horizontal-cards-container {
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Ensure cards stay in a single line */
+}
+
+.cards-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* Space between cards */
+}

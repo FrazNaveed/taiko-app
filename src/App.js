@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./components/Navbar/Navbar";
 import InfoBar from "./components/InfoBar/InfoBar";
-import Card from "./components/Cards/Card";
+import CardWrapper from "./components/Cards/CardWrapper";
 import "./App.css";
 
 function App() {
@@ -9,8 +9,10 @@ function App() {
     <div className="App">
       <div className="grid"></div>
       <Navbar />
-      <InfoBar />
-      <Card />
+      <div className="main-body-content">
+        <InfoBar />
+        <CardWrapper />
+      </div>
     </div>
   );
 }

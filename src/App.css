@@ -31,3 +31,10 @@ body {
     );
   pointer-events: none;
 }
+
+.main-body-content {
+  margin-top: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
