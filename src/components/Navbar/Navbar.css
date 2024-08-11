@@ -1,0 +1,55 @@
+/* Navbar.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: linear-gradient(
+    135deg,
+    #1a000a,
+    #000000
+  ); /* Matching your background */
+  color: white;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 40px; /* Adjust size as needed */
+  margin-right: 10px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo-text .small-text {
+  font-size: 14px; /* Smaller size for "Hekla" */
+  font-weight: normal; /* Optional: make "Hekla" not bold */
+}
+
+.navbar-heading {
+  flex: 1; /* Allows the heading to take up available space */
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.connect-wallet {
+  background-color: #c8047d; /* Button background color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.connect-wallet:hover {
+  background-color: #6a002e; /* Button hover color */
+}

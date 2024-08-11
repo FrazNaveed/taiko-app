@@ -1,0 +1,85 @@
+.info-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 70%; /* Set width to 70% of the screen */
+  margin: 0 auto; /* Center the info bar horizontally */
+}
+
+.info-bar-left {
+  display: flex;
+  align-items: center;
+}
+
+.taiko-logo {
+  height: 40px; /* Adjust size as needed */
+}
+
+.token-info-container {
+  background-color: #4b0012; /* Background color for token info */
+  padding: 5px 10px;
+  border-radius: 8px;
+  margin-left: 10px; /* Adjust spacing if needed */
+}
+
+.token-info {
+  display: flex;
+  align-items: center;
+}
+
+.token-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.token-price {
+  font-size: 16px;
+}
+
+.info-bar-middle {
+  display: flex;
+  align-items: center;
+}
+
+.arrow-button {
+  background-color: #4b0012;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.arrow-button.left {
+  margin-right: 10px;
+}
+
+.arrow-button.right {
+  margin-left: 10px;
+}
+
+.info-bar-right {
+  display: flex;
+  align-items: center;
+}
+
+.clock-icon {
+  height: 45px; /* Adjust size to make it smaller */
+  width: 45px; /* Ensure width is consistent with height */
+  margin-left: 8px; /* Space between timer and clock icon */
+}
+
+.timer {
+  font-size: 16px;
+  background-color: #4b0012; /* Background color for the timer */
+  padding: 5px 10px;
+  border-radius: 8px;
+  position: relative; /* Ensure clock can be positioned above */
+}
