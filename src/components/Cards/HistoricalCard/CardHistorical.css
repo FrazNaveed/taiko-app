@@ -64,6 +64,7 @@
   display: flex;
   justify-content: space-between;
 }
+
 .card_body_prize-section {
   display: flex;
   justify-content: space-between;
@@ -103,4 +104,28 @@
 
 .multiplier-arrow-down-historical span {
   font-weight: bold;
+}
+
+/* New styles for disabled card */
+.disabled-card {
+  opacity: 0.6;
+  background-color: #ccc; /* Light gray background */
+  border: 1px solid #aaa; /* Lighter border color */
+}
+
+.disabled-card .card-body {
+  border: 2px solid #aaa; /* Lighter border for card body */
+}
+
+.disabled-card .round-price,
+.disabled-card .round-difference {
+  color: #888; /* Lighter text color */
+}
+
+.disabled-card .multiplier-arrow-up-historical {
+  /* Lighter background color for arrows */
+  background-color: var(--green-color);
+}
+.disabled-card .multiplier-arrow-down-historical {
+  background-color: #aaa;
 }

@@ -14,7 +14,7 @@ const CardFuture = () => {
           <span>UP</span>
         </div>
         <div className="card-body-future">
-          <span>Entry starts</span>
+          <span>Entry starts:</span>
           <span>~00:19</span>
         </div>
         <div className="card-future-multiplier-arrow-down">

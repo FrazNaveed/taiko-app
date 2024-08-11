@@ -28,8 +28,8 @@
 }
 
 .logo-text .small-text {
-  font-size: 14px; /* Smaller size for "Hekla" */
-  font-weight: normal; /* Optional: make "Hekla" not bold */
+  font-size: 14px;
+  font-weight: normal;
 }
 
 .navbar-heading {
@@ -41,7 +41,7 @@
 }
 
 .connect-wallet {
-  background-color: #c8047d; /* Button background color */
+  background-color: var(--button-color); /* Button background color */
   color: white;
   border: none;
   border-radius: 5px;

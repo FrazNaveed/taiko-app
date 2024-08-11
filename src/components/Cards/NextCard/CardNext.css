@@ -46,7 +46,7 @@
   flex-direction: column;
   align-items: center;
   color: var(--card-body-font);
-  gap: 5px;
+  gap: 10px;
 }
 
 .card_body_invest-btns .invest-btn-up {
@@ -135,7 +135,7 @@
 
 .close-button:hover,
 .close-button:focus {
-  color: black;
+  color: var(--button-color);
   text-decoration: none;
   cursor: pointer;
 }
@@ -169,12 +169,12 @@
 .modal-content button {
   padding: 10px 20px;
   border-radius: 5px;
-  background-color: var(--green-color);
+  background-color: var(--button-color);
   color: white;
   border: none;
   cursor: pointer;
 }
 
 .modal-content button:hover {
-  background-color: var(--dark-green-color);
+  background-color: var(--card-border);
 }

@@ -5,7 +5,7 @@ import "./CardHistorical.css";
 
 const CardHistorical = () => {
   return (
-    <div className="card">
+    <div className="card disabled-card">
       <div className="card-heading">
         <span>Expired</span>
       </div>

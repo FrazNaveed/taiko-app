@@ -21,9 +21,9 @@
 
 .token-info-container {
   background-color: #4b0012; /* Background color for token info */
-  padding: 5px 10px;
+  padding: 10px 10px;
   border-radius: 8px;
-  margin-left: 10px; /* Adjust spacing if needed */
+  margin-left: 5px;
 }
 
 .token-info {
@@ -79,7 +79,7 @@
 .timer {
   font-size: 16px;
   background-color: #4b0012; /* Background color for the timer */
-  padding: 5px 10px;
+  padding: 10px 10px;
   border-radius: 8px;
   position: relative; /* Ensure clock can be positioned above */
 }
