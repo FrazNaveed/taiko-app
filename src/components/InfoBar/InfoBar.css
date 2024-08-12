@@ -44,25 +44,50 @@
 .info-bar-middle {
   display: flex;
   align-items: center;
+  flex-grow: 1;
+  justify-content: center; /* Center content horizontally */
 }
 
-.arrow-button {
-  background-color: #4b0012;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  font-size: 18px;
+.tooltip {
+  position: relative;
+  display: inline-block;
   cursor: pointer;
-  margin: 0 5px;
 }
 
-.arrow-button.left {
-  margin-right: 10px;
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 300px;
+  background-color: #333;
+  color: #fff;
+  text-align: left; /* Align text to the left for better readability */
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position above the trigger */
+  left: 50%;
+  margin-left: -150px; /* Center the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-.arrow-button.right {
-  margin-left: 10px;
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip .tooltip-trigger {
+  font-size: 16px;
+  background-color: #4b0012;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.highlighted-link {
+  color: #ff69b4; /* Pink color */
+  text-decoration: underline;
 }
 
 .info-bar-right {
@@ -82,4 +107,13 @@
   padding: 10px 10px;
   border-radius: 8px;
   position: relative; /* Ensure clock can be positioned above */
+}
+
+ol {
+  margin: 0;
+  padding-left: 20px; /* Add some space before the list items */
+}
+
+ol li {
+  margin-bottom: 10px; /* Add space between list items */
 }

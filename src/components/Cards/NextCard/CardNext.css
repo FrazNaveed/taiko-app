@@ -101,6 +101,7 @@
   font-weight: bold;
 }
 
+/* Modal Styles */
 .modal {
   display: flex;
   justify-content: center;
@@ -158,6 +159,12 @@
   -webkit-appearance: none;
   -moz-appearance: textfield;
   appearance: none;
+  cursor: pointer;
+}
+
+.modal-content input:disabled {
+  background-color: #f0f0f0; /* Light grey background for disabled input */
+  cursor: not-allowed; /* Ensure cursor is not-allowed */
 }
 
 .modal-content input::-webkit-outer-spin-button,

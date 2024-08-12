@@ -4,22 +4,18 @@ import axios from "axios";
 import "./InfoBar.css"; // Import CSS for styling
 
 const InfoBar = () => {
-  // Timer state
   const [seconds, setSeconds] = useState(0);
   const [price, setPrice] = useState(null);
 
   useEffect(() => {
-    // Set up interval for timer
     const interval = setInterval(() => {
       setSeconds((prev) => prev + 1);
     }, 1000);
 
-    // Clear interval on component unmount
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    // Function to fetch the price
     const fetchPrice = async () => {
       try {
         const response = await axios.get(
@@ -30,17 +26,14 @@ const InfoBar = () => {
         const expoValue = Number(priceData.expo);
 
         const adjustedPrice = priceValue * Math.pow(10, expoValue);
-        console.log(adjustedPrice);
         setPrice(adjustedPrice);
       } catch (error) {
         console.error("Error fetching the price", error);
       }
     };
 
-    // Fetch the price every 0.2 seconds
     const intervalId = setInterval(fetchPrice, 200);
 
-    // Cleanup the interval on component unmount
     return () => clearInterval(intervalId);
   }, []);
 
@@ -55,7 +48,6 @@ const InfoBar = () => {
 
   return (
     <div className="info-bar">
-      {/* Left Section */}
       <div className="info-bar-left">
         <img src="/assets/taiko.svg" alt="Taiko Logo" className="taiko-logo" />
         <div className="token-info-container">
@@ -63,13 +55,58 @@ const InfoBar = () => {
             <span className="token-name">TAIKO/USDT</span>
             <span className="token-price">
               {price ? `$${price.toFixed(5)}` : "Loading..."}
-            </span>{" "}
-            {/* Replace with dynamic price if needed */}
+            </span>
           </span>
         </div>
       </div>
 
-      {/* Right Section */}
+      <div className="info-bar-middle">
+        <div className="tooltip">
+          <span className="tooltip-text">
+            <ol>
+              <li>Bets are placed using ETH currency.</li>
+              <li>
+                Please add{" "}
+                <a
+                  href="https://chainlist.org/chain/167009"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="highlighted-link"
+                >
+                  Hekla network
+                </a>{" "}
+                to your metamask wallet.
+              </li>
+              <li>
+                You need Hekla ETH for betting. You can{" "}
+                <a
+                  href="https://holesky-faucet.pk910.de/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="highlighted-link"
+                >
+                  mine Holesky ETH
+                </a>{" "}
+                here.
+              </li>
+              <li>
+                Then{" "}
+                <a
+                  href="https://bridge.hekla.taiko.xyz/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="highlighted-link"
+                >
+                  bridge
+                </a>{" "}
+                them to Hekla network.
+              </li>
+            </ol>
+          </span>
+          <span className="tooltip-trigger">Instructions for game</span>
+        </div>
+      </div>
+
       <div className="info-bar-right">
         <span className="timer">Time left: {formatTime(seconds)}</span>
         <img src="/assets/clock.webp" alt="Clock" className="clock-icon" />
