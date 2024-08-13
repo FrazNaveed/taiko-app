@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { ethers } from "ethers";
+import { contractAddress, abi } from "../../../contractConfig/contractConfig";
+
 import "./CardNext.css";
+
+const MIN_BET_AMOUNT = 0.0001;
 
 const CardNext = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [betType, setBetType] = useState("");
   const [betAmount, setBetAmount] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
+  const [error, setError] = useState("");
+  const [prizePool, setPrizePool] = useState(0);
 
   // Check if wallet is connected on component mount
   useEffect(() => {
@@ -17,7 +24,23 @@ const CardNext = () => {
       }
     };
     checkWalletConnection();
+    fetchPrizePool();
   }, []);
+
+  const fetchPrizePool = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL}/prizePool`
+      );
+      const prizePoolInWei = response.data.prizePool;
+      const prizePoolInEth = ethers.utils.formatEther(prizePoolInWei);
+      console.log(prizePoolInEth, "prizePoolInEth");
+      const formattedPrizePool = Number(prizePoolInEth);
+      setPrizePool(formattedPrizePool);
+    } catch (error) {
+      console.error("Error fetching prize pool data:", error);
+    }
+  };
 
   const openModal = (type) => {
     setBetType(type);
@@ -28,10 +51,16 @@ const CardNext = () => {
     setIsModalOpen(false);
     setBetType("");
     setBetAmount(""); // Clear bet amount when modal closes
+    setError(""); // Clear error message when modal closes
   };
 
   const handleBetAmountChange = (event) => {
-    setBetAmount(event.target.value);
+    const value = event.target.value;
+    setBetAmount(value);
+    // Clear error if the input is valid or empty
+    if (value === "" || parseFloat(value) >= MIN_BET_AMOUNT) {
+      setError("");
+    }
   };
 
   const connectWallet = async () => {
@@ -53,27 +82,68 @@ const CardNext = () => {
   };
 
   const betBull = async () => {
-    try {
-      const res = await axios.post(`${process.env.REACT_APP_URL}/betBull`, {
-        amount: betAmount,
-      });
-      console.log(res);
-    } catch (err) {
-      console.error("Error placing bet:", err);
+    if (
+      parseFloat(betAmount) === 0 ||
+      parseFloat(betAmount) >= MIN_BET_AMOUNT
+    ) {
+      try {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(contractAddress, abi, signer);
+          const epochResponse = await axios.get(
+            `${process.env.REACT_APP_URL}/currentEpoch`
+          );
+          const tx = await contract.betBull(
+            parseInt(epochResponse.data.epoch) + 1,
+            {
+              value: ethers.utils.parseEther(betAmount),
+            }
+          );
+          await tx.wait();
+          await axios.post(`${process.env.REACT_APP_URL}/dummyBets1`);
+        }
+      } catch (err) {
+        console.error("Error placing bet:", err);
+      }
+      closeModal();
+    } else {
+      setError(`Amount must be at least ${MIN_BET_AMOUNT}`);
     }
-    closeModal();
   };
 
   const betBear = async () => {
-    try {
-      const res = await axios.post(`${process.env.REACT_APP_URL}/betBear`, {
-        amount: betAmount,
-      });
-      console.log(res);
-    } catch (err) {
-      console.error("Error placing bet:", err);
+    if (
+      parseFloat(betAmount) === 0 ||
+      parseFloat(betAmount) >= MIN_BET_AMOUNT
+    ) {
+      try {
+        const { ethereum } = window;
+        if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(contractAddress, abi, signer);
+          const epochResponse = await axios.get(
+            `${process.env.REACT_APP_URL}/currentEpoch`
+          );
+
+          const tx = await contract.betBear(
+            parseInt(epochResponse.data.epoch) + 1,
+            {
+              value: ethers.utils.parseEther(betAmount),
+            }
+          );
+          await tx.wait();
+          //  await axios.post(`${process.env.REACT_APP_URL}/dummyBets2`);
+        }
+      } catch (err) {
+        console.error("Error placing bet:", err);
+      }
+      closeModal();
+    } else {
+      setError(`Amount must be at least ${MIN_BET_AMOUNT}`);
     }
-    closeModal();
   };
 
   return (
@@ -86,10 +156,10 @@ const CardNext = () => {
           <span>UP</span>
         </div>
 
-        <div className="card-body">
+        <div className="card-body-next">
           <div className="card_body_prize-section">
             <span>Prize Pool: </span>
-            <span> 531.35 ETH</span>
+            <span> {prizePool} ETH</span>
           </div>
 
           <div className="card_body_invest-btns">
@@ -116,11 +186,12 @@ const CardNext = () => {
             <p>Enter your bet amount:</p>
             <input
               type="number"
-              placeholder="Bet amount"
+              placeholder={`Min amount: ${MIN_BET_AMOUNT}`}
               value={betAmount}
               onChange={handleBetAmountChange}
               disabled={!walletAddress} // Disable input if wallet not connected
             />
+            {error && <p className="error-message">{error}</p>}
             {walletAddress ? (
               <button onClick={betType === "UP" ? betBull : betBear}>
                 Place Bet

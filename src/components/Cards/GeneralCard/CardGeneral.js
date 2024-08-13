@@ -1,43 +1,68 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { usePrice } from "../../../PriceContext"; // Import usePrice
 import "./CardGeneral.css";
 
 const CardGeneral = () => {
+  const price = usePrice(); // Get price from context
+  const referencePrice = 1.92185; // Set reference price here
+
   return (
-    <div className="card">
-      <div className="card-heading">
+    <div className="card-general">
+      <div className="card-general-heading">
         <span>Live</span>
       </div>
-      <div className="card-section">
-        <div className="multiplier-arrow-up">
+      <div className="card-general-section">
+        <div className="card-general-arrow card-general-arrow-up">
           <span>UP</span>
         </div>
-        <div className="card-body">
-          <div className="card-body_price-font">
+        <div
+          className={`card-general-body ${
+            price > referencePrice ? "border-green" : "border-red"
+          }`}
+        >
+          <div className="card-general-price-font">
             <span>Closed Price</span>
           </div>
 
-          <div className="card_body_round-result">
-            <span className="round-price">$530.987</span>
-            <div className="round-difference">
-              {" "}
-              <FontAwesomeIcon icon={faArrowUp} />
-              <span>$-0.917</span>
+          <div className="card-general-round-result">
+            <span
+              className={`card-general-round-price ${
+                price > referencePrice ? "price-above" : "price-below"
+              }`}
+            >
+              {price ? `$${price.toFixed(5)}` : "Loading..."}
+            </span>
+            <div
+              className={`card-general-price-difference ${
+                price > referencePrice ? "background-green" : "background-red"
+              }`}
+            >
+              {price && (
+                <FontAwesomeIcon
+                  icon={price > referencePrice ? faArrowUp : faArrowDown}
+                  className="card-general-price-icon"
+                />
+              )}
+              <span className="card-general-difference-value">
+                {price && `$${(price - referencePrice).toFixed(3)}`}
+              </span>
             </div>
           </div>
 
-          <div className="card_body_locked-price">
+          <div className="card-general-locked-price">
             <span>Locked Price: </span>
-            <span> $531.35</span>
+            <span>{referencePrice}</span>
           </div>
 
-          <div className="card_body_prize-section">
+          <div className="card-general-prize-section">
             <span>Prize Pool: </span>
             <span> 531.35 ETH</span>
           </div>
         </div>
-        <div className="multiplier-arrow-down">
+
+        <div className="card-general-arrow card-general-arrow-down">
           <span>DOWN</span>
         </div>
       </div>

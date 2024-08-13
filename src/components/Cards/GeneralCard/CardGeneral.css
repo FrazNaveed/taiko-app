@@ -1,4 +1,4 @@
-.card {
+.card-general {
   background-color: var(--card-background); /* Background color for cards */
   color: white;
   padding: 20px;
@@ -8,12 +8,12 @@
   border: 1px solid var(--card-border);
 }
 
-.card-heading span {
+.card-general-heading span {
   font-weight: bold;
   font-size: 1rem;
 }
 
-.card .card-section {
+.card-general-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,8 +21,7 @@
   height: 90%;
 }
 
-.card-body {
-  border: 2px solid var(--green-color);
+.card-general-body {
   border-radius: 12px;
   padding: 5px;
   width: 100%;
@@ -32,26 +31,40 @@
   justify-content: space-evenly;
 }
 
-.card-body .card-body_price-font span {
+.border-green {
+  border: 2px solid var(--green-color);
+}
+
+.border-red {
+  border: 2px solid var(--red-color);
+}
+
+.card-general-price-font span {
   font-size: 0.8rem;
 }
 
-.card_body_round-result {
+.card-general-round-result {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.card_body_round-result .round-price {
-  color: var(--red-color);
+.card-general-round-price {
   font-weight: bold;
   font-size: 26px;
   text-decoration: underline; /* Add underline */
   text-decoration-style: dotted; /* Make the underline dotted */
 }
 
-.card_body_round-result .round-difference {
-  background-color: var(--red-color);
+.price-above {
+  color: var(--green-color);
+}
+
+.price-below {
+  color: var(--red-color);
+}
+
+.card-general-price-difference {
   border-radius: 5px;
   width: 90px;
   height: 30px;
@@ -60,47 +73,51 @@
   align-items: center;
 }
 
-.card_body_locked-price {
-  display: flex;
-  justify-content: space-between;
+.background-green {
+  background-color: var(--green-color);
 }
-.card_body_prize-section {
+
+.background-red {
+  background-color: var(--red-color);
+}
+
+.card-general-locked-price {
   display: flex;
   justify-content: space-between;
 }
 
-.card-body .card_body_locked-price span {
+.card-general-prize-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-general-locked-price span {
   font-size: 0.8rem;
 }
 
-.card_body_prize-section span {
+.card-general-prize-section span {
   font-weight: bold;
   color: var(--card-body-font);
   font-size: 1rem;
 }
 
-.multiplier-arrow-up {
+.card-general-arrow {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  width: 60%;
+}
+
+.card-general-arrow-up {
   background-color: var(--green-color);
-  display: flex;
-  justify-content: center;
   border-radius: 10px 10px 0 0;
-  padding: 10px;
-  width: 60%;
 }
 
-.multiplier-arrow-up span {
-  font-weight: bold;
-}
-
-.multiplier-arrow-down {
+.card-general-arrow-down {
   background-color: var(--red-color);
-  display: flex;
-  justify-content: center;
   border-radius: 0 0 10px 10px;
-  padding: 10px;
-  width: 60%;
 }
 
-.multiplier-arrow-down span {
+.card-general-arrow span {
   font-weight: bold;
 }

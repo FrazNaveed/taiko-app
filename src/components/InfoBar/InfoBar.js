@@ -1,41 +1,11 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-
-import "./InfoBar.css"; // Import CSS for styling
+import React from "react";
+import { useTimer } from "../../TimerContext";
+import { usePrice } from "../../PriceContext";
+import "./InfoBar.css";
 
 const InfoBar = () => {
-  const [seconds, setSeconds] = useState(0);
-  const [price, setPrice] = useState(null);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSeconds((prev) => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const fetchPrice = async () => {
-      try {
-        const response = await axios.get(
-          "https://hermes.pyth.network/v2/updates/price/latest?ids%5B%5D=0xd878b9766566a87675421e9b11992c1f2ca2438d5b7d841cb147308e1bd6bb99"
-        );
-        const priceData = response.data.parsed[0].price;
-        const priceValue = Number(priceData.price);
-        const expoValue = Number(priceData.expo);
-
-        const adjustedPrice = priceValue * Math.pow(10, expoValue);
-        setPrice(adjustedPrice);
-      } catch (error) {
-        console.error("Error fetching the price", error);
-      }
-    };
-
-    const intervalId = setInterval(fetchPrice, 200);
-
-    return () => clearInterval(intervalId);
-  }, []);
+  const { secondsRemaining } = useTimer();
+  const price = usePrice();
 
   const formatTime = (sec) => {
     const minutes = Math.floor(sec / 60);
@@ -78,7 +48,7 @@ const InfoBar = () => {
                 to your metamask wallet.
               </li>
               <li>
-                You need Hekla ETH for betting. You can{" "}
+                You need Hekla ETH for betting. You first need to{" "}
                 <a
                   href="https://holesky-faucet.pk910.de/"
                   target="_blank"
@@ -87,7 +57,7 @@ const InfoBar = () => {
                 >
                   mine Holesky ETH
                 </a>{" "}
-                here.
+                from here.
               </li>
               <li>
                 Then{" "}
@@ -108,7 +78,7 @@ const InfoBar = () => {
       </div>
 
       <div className="info-bar-right">
-        <span className="timer">Time left: {formatTime(seconds)}</span>
+        <span className="timer">Next in: {formatTime(secondsRemaining)}</span>
         <img src="/assets/clock.webp" alt="Clock" className="clock-icon" />
       </div>
     </div>
