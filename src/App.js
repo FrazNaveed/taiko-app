@@ -4,6 +4,8 @@ import InfoBar from "./components/InfoBar/InfoBar";
 import CardWrapper from "./components/Cards/CardWrapper";
 import { TimerProvider } from "./TimerContext";
 import { PriceProvider } from "./PriceContext"; // Import PriceProvider
+import WebSocketComponent from "./WebSocketComponent";
+
 import "./App.css";
 
 function App() {
@@ -13,6 +15,8 @@ function App() {
         <div className="App">
           <div className="grid"></div>
           <Navbar />
+          <WebSocketComponent />
+
           <div className="main-body-content">
             <InfoBar />
             <CardWrapper />

@@ -102,7 +102,7 @@ const CardNext = () => {
             }
           );
           await tx.wait();
-          await axios.post(`${process.env.REACT_APP_URL}/dummyBets1`);
+          // await axios.post(`${process.env.REACT_APP_URL}/dummyBets1`);
         }
       } catch (err) {
         console.error("Error placing bet:", err);
