@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
 import { contractAddress, abi } from "../../../contractConfig/contractConfig";
+import { ClipLoader } from "react-spinners";
 
 import "./CardNext.css";
 
@@ -14,8 +15,8 @@ const CardNext = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [error, setError] = useState("");
   const [prizePool, setPrizePool] = useState(0);
+  const [loading, setLoading] = useState(false); // State for the loader
 
-  // Check if wallet is connected on component mount
   useEffect(() => {
     const checkWalletConnection = () => {
       const storedAddress = localStorage.getItem("walletAddress");
@@ -51,6 +52,7 @@ const CardNext = () => {
     setBetType("");
     setBetAmount(""); // Clear bet amount when modal closes
     setError(""); // Clear error message when modal closes
+    setLoading(false); // Ensure the loader is hidden
   };
 
   const handleBetAmountChange = (event) => {
@@ -59,6 +61,8 @@ const CardNext = () => {
     // Clear error if the input is valid or empty
     if (value === "" || parseFloat(value) >= MIN_BET_AMOUNT) {
       setError("");
+    } else {
+      setError(`Amount must be at least ${MIN_BET_AMOUNT}`);
     }
   };
 
@@ -81,11 +85,9 @@ const CardNext = () => {
   };
 
   const betBull = async () => {
-    if (
-      parseFloat(betAmount) === 0 ||
-      parseFloat(betAmount) >= MIN_BET_AMOUNT
-    ) {
+    if (parseFloat(betAmount) >= MIN_BET_AMOUNT) {
       try {
+        setLoading(true); // Show the loader
         const { ethereum } = window;
         if (ethereum) {
           const provider = new ethers.providers.Web3Provider(ethereum);
@@ -101,11 +103,11 @@ const CardNext = () => {
             }
           );
           await tx.wait();
-          // await axios.post(`${process.env.REACT_APP_URL}/dummyBets1`);
         }
       } catch (err) {
         console.error("Error placing bet:", err);
       }
+      setLoading(false); // Hide the loader after the transaction is confirmed
       closeModal();
     } else {
       setError(`Amount must be at least ${MIN_BET_AMOUNT}`);
@@ -113,11 +115,9 @@ const CardNext = () => {
   };
 
   const betBear = async () => {
-    if (
-      parseFloat(betAmount) === 0 ||
-      parseFloat(betAmount) >= MIN_BET_AMOUNT
-    ) {
+    if (parseFloat(betAmount) >= MIN_BET_AMOUNT) {
       try {
+        setLoading(true); // Show the loader
         const { ethereum } = window;
         if (ethereum) {
           const provider = new ethers.providers.Web3Provider(ethereum);
@@ -134,11 +134,11 @@ const CardNext = () => {
             }
           );
           await tx.wait();
-          //  await axios.post(`${process.env.REACT_APP_URL}/dummyBets2`);
         }
       } catch (err) {
         console.error("Error placing bet:", err);
       }
+      setLoading(false); // Hide the loader after the transaction is confirmed
       closeModal();
     } else {
       setError(`Amount must be at least ${MIN_BET_AMOUNT}`);
@@ -188,12 +188,16 @@ const CardNext = () => {
               placeholder={`Min amount: ${MIN_BET_AMOUNT}`}
               value={betAmount}
               onChange={handleBetAmountChange}
+              step="0.0001"
               disabled={!walletAddress} // Disable input if wallet not connected
             />
             {error && <p className="error-message">{error}</p>}
             {walletAddress ? (
-              <button onClick={betType === "UP" ? betBull : betBear}>
-                Place Bet
+              <button
+                onClick={betType === "UP" ? betBull : betBear}
+                disabled={loading}
+              >
+                {loading ? <ClipLoader color="pink" size={20} /> : "Place Bet"}
               </button>
             ) : (
               <button onClick={connectWallet}>Connect Wallet</button>

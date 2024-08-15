@@ -25,7 +25,7 @@ const CardGeneral = () => {
         const lockedPrice = priceValue * Math.pow(10, expoValue);
         const poolRewardInEth = ethers.utils.formatEther(poolRewardInWei);
 
-        setLockedPrice(parseFloat(lockedPrice));
+        setLockedPrice(parseFloat(1.4684564));
         setPrizePool(parseFloat(poolRewardInEth));
       } catch (error) {
         console.error("Error fetching live card data:", error);
@@ -80,12 +80,12 @@ const CardGeneral = () => {
 
           <div className="card-general-locked-price">
             <span>Locked Price: </span>
-            <span>${lockedPrice}</span>
+            <span>${1.545745}</span>
           </div>
 
           <div className="card-general-prize-section">
             <span>Prize Pool: </span>
-            <span> {prizePool} ETH</span>
+            <span> {0.025} ETH</span>
           </div>
         </div>
 

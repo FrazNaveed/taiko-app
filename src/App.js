@@ -11,17 +11,23 @@ function App() {
   const [websocketMessage, setWebsocketMessage] = useState(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`${process.env.REACT_APP_SOCKET_URL}`);
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setWebsocketMessage(data.message);
-    };
-    ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-    return () => {
-      ws.close();
-    };
+    const { ethereum } = window;
+
+    if (ethereum) {
+      const handleAccountsChanged = (accounts) => {
+        if (accounts.length > 0) {
+          const newAccount = accounts[0];
+          localStorage.setItem("walletAddress", newAccount);
+          window.location.reload();
+        } else {
+          localStorage.removeItem("walletAddress");
+        }
+      };
+      ethereum.on("accountsChanged", handleAccountsChanged);
+      return () => {
+        ethereum.removeListener("accountsChanged", handleAccountsChanged);
+      };
+    }
   }, []);
 
   return (

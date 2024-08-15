@@ -6,9 +6,9 @@ import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import "./CardHistorical.css";
 
 const CardHistorical = () => {
-  const [closedPrice, setClosePrice] = useState(null);
-  const [startPrice, setStartPrice] = useState(null);
-  const [prizePool, setPrizePool] = useState(null);
+  const [closedPrice, setClosePrice] = useState(0);
+  const [startPrice, setStartPrice] = useState(0);
+  const [prizePool, setPrizePool] = useState(0);
 
   useEffect(() => {
     const fetchLiveCardData = async () => {
@@ -18,13 +18,23 @@ const CardHistorical = () => {
         );
         const _startPrice = response.data.startPrice;
         const _closePrice = response.data.closePrice;
-        const poolRewardInWei = response.data.totalPoolReward;
-        const startPrice = _startPrice * Math.pow(10, -8);
-        const closePrice = _closePrice * Math.pow(10, -8);
-        const poolRewardInEth = ethers.utils.formatEther(poolRewardInWei);
-        setStartPrice(parseFloat(startPrice));
-        setClosePrice(parseFloat(closePrice));
-        setPrizePool(parseFloat(poolRewardInEth));
+        const poolRewardInWei = ethers.BigNumber.from(
+          response.data.totalPoolReward
+        );
+
+        const startPrice = parseFloat(
+          (_startPrice * Math.pow(10, -7)).toFixed(3)
+        );
+        const closePrice = parseFloat(
+          (_closePrice * Math.pow(10, -7)).toFixed(3)
+        );
+        const poolRewardInEth = parseFloat(
+          ethers.utils.formatEther(poolRewardInWei)
+        ).toFixed(4);
+
+        setStartPrice(195);
+        setClosePrice(192);
+        setPrizePool(poolRewardInEth);
       } catch (error) {
         console.error("Error fetching live card data:", error);
       }
@@ -39,11 +49,7 @@ const CardHistorical = () => {
         <span>Expired</span>
       </div>
       <div className="card-section">
-        <div
-          className={`multiplier-arrow-up-historical ${
-            startPrice > closedPrice ? "background-green" : ""
-          }`}
-        >
+        <div className={`multiplier-arrow-up-historical background-green`}>
           <span>UP</span>
         </div>
         <div className="card-body">
@@ -57,7 +63,7 @@ const CardHistorical = () => {
                 startPrice > closedPrice ? "price-above" : "price-below"
               }`}
             >
-              ${closedPrice}
+              ${1.95687}
             </span>
 
             <div
@@ -65,22 +71,21 @@ const CardHistorical = () => {
                 startPrice > closedPrice ? "background-green" : "background-red"
               }`}
             >
-              {" "}
               <FontAwesomeIcon
                 icon={startPrice > closedPrice ? faArrowUp : faArrowDown}
               />
-              <span>${closedPrice - startPrice}</span>
+              <span>${0.3}</span>
             </div>
           </div>
 
           <div className="card_body_locked-price">
             <span>Locked Price: </span>
-            <span> ${startPrice}</span>
+            <span> ${1.98541}</span>
           </div>
 
           <div className="card_body_prize-section">
             <span>Prize Pool: </span>
-            <span> {prizePool} ETH</span>
+            <span> {0.15} ETH</span>
           </div>
         </div>
         <div
