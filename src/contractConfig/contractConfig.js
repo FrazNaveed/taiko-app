@@ -1,6 +1,6 @@
 // src/contractConfig.js
 
-export const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+export const contractAddress = "0x6f75a100a58A330e3D37c973E6206f56C50F0C71";
 
 export const abi = [
   {

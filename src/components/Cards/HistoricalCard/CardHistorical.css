@@ -42,22 +42,36 @@
   justify-content: space-between;
 }
 
-.card_body_round-result .round-price {
-  color: var(--red-color);
+.card-expired-round-price {
   font-weight: bold;
   font-size: 26px;
-  text-decoration: underline; /* Add underline */
-  text-decoration-style: dotted; /* Make the underline dotted */
+  text-decoration: underline;
+  text-decoration-style: dotted;
 }
 
-.card_body_round-result .round-difference {
-  background-color: var(--red-color);
+.price-above {
+  color: var(--green-color);
+}
+
+.price-below {
+  color: var(--red-color);
+}
+
+.card-expired-round-difference {
   border-radius: 5px;
   width: 90px;
   height: 30px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.background-green {
+  background-color: var(--green-color);
+}
+
+.background-red {
+  background-color: var(--red-color);
 }
 
 .card_body_locked-price {

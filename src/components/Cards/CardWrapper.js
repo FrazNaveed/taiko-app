@@ -9,7 +9,6 @@ const CardWrapper = () => {
   return (
     <div className="cards-wrapper">
       <CardHistorical />
-      <CardHistorical />
       <CardGeneral />
       <CardNext />
       <CardFuture />

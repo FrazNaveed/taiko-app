@@ -34,7 +34,6 @@ const CardNext = () => {
       );
       const prizePoolInWei = response.data.prizePool;
       const prizePoolInEth = ethers.utils.formatEther(prizePoolInWei);
-      console.log(prizePoolInEth, "prizePoolInEth");
       const formattedPrizePool = Number(prizePoolInEth);
       setPrizePool(formattedPrizePool);
     } catch (error) {

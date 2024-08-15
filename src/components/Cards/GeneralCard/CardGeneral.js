@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ethers } from "ethers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { usePrice } from "../../../PriceContext"; // Import usePrice
@@ -6,7 +8,32 @@ import "./CardGeneral.css";
 
 const CardGeneral = () => {
   const price = usePrice(); // Get price from context
-  const referencePrice = 1.92185; // Set reference price here
+
+  const [lockedPrice, setLockedPrice] = useState(null);
+  const [prizePool, setPrizePool] = useState(null);
+
+  useEffect(() => {
+    const fetchLiveCardData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_URL}/getLiveCardData`
+        );
+        const priceValue = response.data.lockedPrice;
+        const expoValue = response.data.decimals;
+        const poolRewardInWei = response.data.poolReward;
+
+        const lockedPrice = priceValue * Math.pow(10, expoValue);
+        const poolRewardInEth = ethers.utils.formatEther(poolRewardInWei);
+
+        setLockedPrice(parseFloat(lockedPrice));
+        setPrizePool(parseFloat(poolRewardInEth));
+      } catch (error) {
+        console.error("Error fetching live card data:", error);
+      }
+    };
+
+    fetchLiveCardData();
+  }, []);
 
   return (
     <div className="card-general">
@@ -19,7 +46,7 @@ const CardGeneral = () => {
         </div>
         <div
           className={`card-general-body ${
-            price > referencePrice ? "border-green" : "border-red"
+            price > lockedPrice ? "border-green" : "border-red"
           }`}
         >
           <div className="card-general-price-font">
@@ -29,36 +56,36 @@ const CardGeneral = () => {
           <div className="card-general-round-result">
             <span
               className={`card-general-round-price ${
-                price > referencePrice ? "price-above" : "price-below"
+                price > lockedPrice ? "price-above" : "price-below"
               }`}
             >
               {price ? `$${price.toFixed(5)}` : "Loading..."}
             </span>
             <div
               className={`card-general-price-difference ${
-                price > referencePrice ? "background-green" : "background-red"
+                price > lockedPrice ? "background-green" : "background-red"
               }`}
             >
               {price && (
                 <FontAwesomeIcon
-                  icon={price > referencePrice ? faArrowUp : faArrowDown}
+                  icon={price > lockedPrice ? faArrowUp : faArrowDown}
                   className="card-general-price-icon"
                 />
               )}
               <span className="card-general-difference-value">
-                {price && `$${(price - referencePrice).toFixed(3)}`}
+                {price && `$${(price - lockedPrice).toFixed(3)}`}
               </span>
             </div>
           </div>
 
           <div className="card-general-locked-price">
             <span>Locked Price: </span>
-            <span>{referencePrice}</span>
+            <span>${lockedPrice}</span>
           </div>
 
           <div className="card-general-prize-section">
             <span>Prize Pool: </span>
-            <span> 531.35 ETH</span>
+            <span> {prizePool} ETH</span>
           </div>
         </div>
 
