@@ -1,12 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ethers } from "ethers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import "./CardHistorical.css";
 
 const CardHistorical = () => {
-  const closedPrice = 1.987; // Example closed price
-  const startPrice = 0.35; // Hardcoded reference price
-  const prizePool = 591.35; // Example prize pool
+  const [closedPrice, setClosePrice] = useState(null);
+  const [startPrice, setStartPrice] = useState(null);
+  const [prizePool, setPrizePool] = useState(null);
+
+  useEffect(() => {
+    const fetchLiveCardData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_URL}/getHistoricalData`
+        );
+        const _startPrice = response.data.startPrice;
+        const _closePrice = response.data.closePrice;
+        const poolRewardInWei = response.data.totalPoolReward;
+        const startPrice = _startPrice * Math.pow(10, -8);
+        const closePrice = _closePrice * Math.pow(10, -8);
+        const poolRewardInEth = ethers.utils.formatEther(poolRewardInWei);
+        setStartPrice(parseFloat(startPrice));
+        setClosePrice(parseFloat(closePrice));
+        setPrizePool(parseFloat(poolRewardInEth));
+      } catch (error) {
+        console.error("Error fetching live card data:", error);
+      }
+    };
+
+    fetchLiveCardData();
+  }, []);
 
   return (
     <div className="card disabled-card">
@@ -32,7 +57,7 @@ const CardHistorical = () => {
                 startPrice > closedPrice ? "price-above" : "price-below"
               }`}
             >
-              ${closedPrice.toFixed(5)}
+              ${closedPrice}
             </span>
 
             <div
@@ -44,7 +69,7 @@ const CardHistorical = () => {
               <FontAwesomeIcon
                 icon={startPrice > closedPrice ? faArrowUp : faArrowDown}
               />
-              <span>${(closedPrice - startPrice).toFixed(3)}</span>
+              <span>${closedPrice - startPrice}</span>
             </div>
           </div>
 
