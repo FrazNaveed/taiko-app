@@ -185,3 +185,12 @@
 .modal-content button:hover {
   background-color: var(--card-border);
 }
+
+.custom-link {
+  color: #ff69b4; /* Change this to your desired color */
+  text-decoration: none; /* Remove underline */
+}
+
+.custom-link:hover {
+  text-decoration: underline; /* Underline on hover, if desired */
+}

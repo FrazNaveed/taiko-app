@@ -4,16 +4,17 @@ import { usePrice } from "../../PriceContext";
 import "./InfoBar.css";
 
 const InfoBar = () => {
-  const { secondsRemaining } = useTimer();
+  const { timeRemaining, formatTime } = useTimer();
   const price = usePrice();
 
-  const formatTime = (sec) => {
-    const minutes = Math.floor(sec / 60);
-    const seconds = sec % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-      2,
-      "0"
-    )}`;
+  const formatTimeInMinutes = (milliseconds) => {
+    // Convert milliseconds to seconds
+    const seconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(
+      remainingSeconds
+    ).padStart(2, "0")}`;
   };
 
   return (
@@ -78,7 +79,9 @@ const InfoBar = () => {
       </div>
 
       <div className="info-bar-right">
-        <span className="timer">Next in: {formatTime(secondsRemaining)}</span>
+        <span className="timer">
+          Next in: {formatTimeInMinutes(timeRemaining)}
+        </span>
         <img src="/assets/clock.webp" alt="Clock" className="clock-icon" />
       </div>
     </div>

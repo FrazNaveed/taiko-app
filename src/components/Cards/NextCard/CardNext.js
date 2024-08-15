@@ -6,7 +6,7 @@ import { ClipLoader } from "react-spinners";
 
 import "./CardNext.css";
 
-const MIN_BET_AMOUNT = 0.0001;
+const minBet = 0.0001;
 
 const CardNext = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,17 +15,23 @@ const CardNext = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [error, setError] = useState("");
   const [prizePool, setPrizePool] = useState(0);
-  const [loading, setLoading] = useState(false); // State for the loader
+  const [loading, setLoading] = useState(false);
+  const [txStatus, setTxStatus] = useState(null);
+  const [txHash, setTxHash] = useState("");
+  const [betted, setBetted] = useState(false);
+  const [minBet, setMinBet] = useState(0);
 
   useEffect(() => {
     const checkWalletConnection = () => {
       const storedAddress = localStorage.getItem("walletAddress");
       if (storedAddress) {
         setWalletAddress(storedAddress);
+        fetchBettedStatus(storedAddress);
       }
     };
     checkWalletConnection();
     fetchPrizePool();
+    fetchMinBet();
   }, []);
 
   const fetchPrizePool = async () => {
@@ -42,6 +48,29 @@ const CardNext = () => {
     }
   };
 
+  const fetchBettedStatus = async (address) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL}/getAlreadyBetted?address=${address}`
+      );
+      setBetted(response.data.betted);
+    } catch (error) {
+      console.error("Error fetching betted status:", error);
+    }
+  };
+
+  const fetchMinBet = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL}/getMinimumBetAmount`
+      );
+      const minBetInWei = ethers.BigNumber.from(response.data.minBet);
+      const minBetInEth = ethers.utils.formatEther(minBetInWei);
+      setMinBet(minBetInEth);
+    } catch (error) {
+      console.error("Error fetching minimum bet data:", error);
+    }
+  };
   const openModal = (type) => {
     setBetType(type);
     setIsModalOpen(true);
@@ -50,19 +79,21 @@ const CardNext = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setBetType("");
-    setBetAmount(""); // Clear bet amount when modal closes
-    setError(""); // Clear error message when modal closes
-    setLoading(false); // Ensure the loader is hidden
+    setBetAmount("");
+    setError("");
+    setLoading(false);
+    setTxStatus(null);
+    setTxHash("");
+    window.location.reload();
   };
 
   const handleBetAmountChange = (event) => {
     const value = event.target.value;
     setBetAmount(value);
-    // Clear error if the input is valid or empty
-    if (value === "" || parseFloat(value) >= MIN_BET_AMOUNT) {
+    if (value === "" || parseFloat(value) >= minBet) {
       setError("");
     } else {
-      setError(`Amount must be at least ${MIN_BET_AMOUNT}`);
+      setError(`Amount must be at least ${minBet}`);
     }
   };
 
@@ -75,7 +106,7 @@ const CardNext = () => {
         const account = accounts[0];
         localStorage.setItem("walletAddress", account);
         setWalletAddress(account);
-        window.location.reload();
+        fetchBettedStatus(account); // Fetch betted status when wallet address is connected
       } catch (error) {
         console.error("Error connecting to MetaMask:", error);
       }
@@ -84,10 +115,10 @@ const CardNext = () => {
     }
   };
 
-  const betBull = async () => {
-    if (parseFloat(betAmount) >= MIN_BET_AMOUNT) {
+  const placeBet = async (betFunction) => {
+    if (parseFloat(betAmount) >= minBet) {
       try {
-        setLoading(true); // Show the loader
+        setLoading(true);
         const { ethereum } = window;
         if (ethereum) {
           const provider = new ethers.providers.Web3Provider(ethereum);
@@ -96,54 +127,34 @@ const CardNext = () => {
           const epochResponse = await axios.get(
             `${process.env.REACT_APP_URL}/currentEpoch`
           );
-          const tx = await contract.betBull(
-            parseInt(epochResponse.data.epoch) + 1,
-            {
-              value: ethers.utils.parseEther(betAmount),
-            }
-          );
+          const tx = await betFunction(contract, epochResponse);
           await tx.wait();
+          setTxStatus("success");
+          setTxHash(tx.hash);
         }
       } catch (err) {
         console.error("Error placing bet:", err);
+        setTxStatus("failure");
       }
-      setLoading(false); // Hide the loader after the transaction is confirmed
-      closeModal();
+      setLoading(false);
     } else {
-      setError(`Amount must be at least ${MIN_BET_AMOUNT}`);
+      setError(`Amount must be at least ${minBet}`);
     }
   };
 
-  const betBear = async () => {
-    if (parseFloat(betAmount) >= MIN_BET_AMOUNT) {
-      try {
-        setLoading(true); // Show the loader
-        const { ethereum } = window;
-        if (ethereum) {
-          const provider = new ethers.providers.Web3Provider(ethereum);
-          const signer = provider.getSigner();
-          const contract = new ethers.Contract(contractAddress, abi, signer);
-          const epochResponse = await axios.get(
-            `${process.env.REACT_APP_URL}/currentEpoch`
-          );
+  const betBull = () =>
+    placeBet((contract, epochResponse) =>
+      contract.betBull(parseInt(epochResponse.data.epoch) + 1, {
+        value: ethers.utils.parseEther(betAmount),
+      })
+    );
 
-          const tx = await contract.betBear(
-            parseInt(epochResponse.data.epoch) + 1,
-            {
-              value: ethers.utils.parseEther(betAmount),
-            }
-          );
-          await tx.wait();
-        }
-      } catch (err) {
-        console.error("Error placing bet:", err);
-      }
-      setLoading(false); // Hide the loader after the transaction is confirmed
-      closeModal();
-    } else {
-      setError(`Amount must be at least ${MIN_BET_AMOUNT}`);
-    }
-  };
+  const betBear = () =>
+    placeBet((contract, epochResponse) =>
+      contract.betBear(parseInt(epochResponse.data.epoch) + 1, {
+        value: ethers.utils.parseEther(betAmount),
+      })
+    );
 
   return (
     <div className="card">
@@ -182,25 +193,54 @@ const CardNext = () => {
               &times;
             </span>
             <h2>Bet on {betType}</h2>
-            <p>Enter your bet amount:</p>
-            <input
-              type="number"
-              placeholder={`Min amount: ${MIN_BET_AMOUNT}`}
-              value={betAmount}
-              onChange={handleBetAmountChange}
-              step="0.0001"
-              disabled={!walletAddress} // Disable input if wallet not connected
-            />
-            {error && <p className="error-message">{error}</p>}
-            {walletAddress ? (
-              <button
-                onClick={betType === "UP" ? betBull : betBear}
-                disabled={loading}
-              >
-                {loading ? <ClipLoader color="pink" size={20} /> : "Place Bet"}
-              </button>
+            {betted ? (
+              <p>
+                You can place 1 bet per round. Please wait for the timer to end
+                to bet on next round.
+              </p>
             ) : (
-              <button onClick={connectWallet}>Connect Wallet</button>
+              <>
+                <p>Enter your bet amount:</p>
+                <input
+                  type="number"
+                  placeholder={`Min amount: ${minBet}`}
+                  value={betAmount}
+                  onChange={handleBetAmountChange}
+                  step={minBet}
+                  disabled={!walletAddress}
+                />
+                {error && <p className="error-message">{error}</p>}{" "}
+                {walletAddress ? (
+                  <button
+                    onClick={betType === "UP" ? betBull : betBear}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <ClipLoader color="pink" size={20} />
+                    ) : (
+                      "Place Bet"
+                    )}
+                  </button>
+                ) : (
+                  <button onClick={connectWallet}>Connect Wallet</button>
+                )}
+                {txStatus === "success" && (
+                  <p className="success-message">
+                    Transaction successful! See on Explorer:{" "}
+                    <a
+                      href={`https://blockscoutapi.hekla.taiko.xyz/tx/${txHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="custom-link"
+                    >
+                      here
+                    </a>
+                  </p>
+                )}
+                {txStatus === "failure" && (
+                  <p className="error-message">Transaction failed.</p>
+                )}
+              </>
             )}
           </div>
         </div>
