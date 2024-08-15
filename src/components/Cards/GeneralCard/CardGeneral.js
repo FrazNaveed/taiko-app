@@ -16,7 +16,7 @@ const CardGeneral = () => {
     const fetchLiveCardData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_URL}/getLiveCardData`
+          `https://cors-anywhere.herokuapp.com/${process.env.REACT_APP_URL}/getLiveCardData`
         );
         const priceValue = response.data.lockedPrice;
         const expoValue = response.data.decimals;
