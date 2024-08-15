@@ -108,7 +108,7 @@
 }
 
 .multiplier-arrow-down-historical {
-  background-color: var(--red-color);
+  background-color: var(--disable-color);
   display: flex;
   justify-content: center;
   border-radius: 0 0 10px 10px;
@@ -118,6 +118,14 @@
 
 .multiplier-arrow-down-historical span {
   font-weight: bold;
+}
+
+.background-green {
+  background-color: var(--green-color);
+}
+
+.background-red {
+  background-color: var(--red-color);
 }
 
 /* New styles for disabled card */
@@ -134,12 +142,4 @@
 .disabled-card .round-price,
 .disabled-card .round-difference {
   color: #888; /* Lighter text color */
-}
-
-.disabled-card .multiplier-arrow-up-historical {
-  /* Lighter background color for arrows */
-  background-color: var(--green-color);
-}
-.disabled-card .multiplier-arrow-down-historical {
-  background-color: #aaa;
 }

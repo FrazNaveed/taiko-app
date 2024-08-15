@@ -14,7 +14,11 @@ const CardHistorical = () => {
         <span>Expired</span>
       </div>
       <div className="card-section">
-        <div className="multiplier-arrow-up-historical">
+        <div
+          className={`multiplier-arrow-up-historical ${
+            startPrice > closedPrice ? "background-green" : ""
+          }`}
+        >
           <span>UP</span>
         </div>
         <div className="card-body">
@@ -54,7 +58,11 @@ const CardHistorical = () => {
             <span> {prizePool} ETH</span>
           </div>
         </div>
-        <div className="multiplier-arrow-down-historical">
+        <div
+          className={`multiplier-arrow-down-historical ${
+            closedPrice > startPrice ? "background-red" : ""
+          }`}
+        >
           <span>DOWN</span>
         </div>
       </div>
