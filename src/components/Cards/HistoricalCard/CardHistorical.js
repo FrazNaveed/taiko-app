@@ -13,8 +13,15 @@ const CardHistorical = () => {
   useEffect(() => {
     const fetchLiveCardData = async () => {
       try {
+        const config = {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+            "Content-Type": "application/json",
+          },
+        };
         const response = await axios.get(
-          `${process.env.REACT_APP_URL}/getHistoricalData`
+          `${process.env.REACT_APP_URL}/getHistoricalData`,
+          config
         );
         const _startPrice = response.data.startPrice;
         const _closePrice = response.data.closePrice;

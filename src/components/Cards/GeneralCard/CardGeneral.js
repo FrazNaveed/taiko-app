@@ -15,8 +15,15 @@ const CardGeneral = () => {
   useEffect(() => {
     const fetchLiveCardData = async () => {
       try {
+        const config = {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+            "Content-Type": "application/json",
+          },
+        };
         const response = await axios.get(
-          `${process.env.REACT_APP_URL}/getLiveCardData`
+          `${process.env.REACT_APP_URL}/getLiveCardData`,
+          config
         );
         const priceValue = response.data.lockedPrice;
         const expoValue = response.data.decimals;

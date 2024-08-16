@@ -36,8 +36,15 @@ const CardNext = () => {
 
   const fetchPrizePool = async () => {
     try {
+      const config = {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+          "Content-Type": "application/json",
+        },
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_URL}/prizePool`
+        `${process.env.REACT_APP_URL}/prizePool`,
+        config
       );
       const prizePoolInWei = response.data.prizePool;
       const prizePoolInEth = ethers.utils.formatEther(prizePoolInWei);
@@ -50,8 +57,15 @@ const CardNext = () => {
 
   const fetchBettedStatus = async (address) => {
     try {
+      const config = {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+          "Content-Type": "application/json",
+        },
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_URL}/getAlreadyBetted?address=${address}`
+        `${process.env.REACT_APP_URL}/getAlreadyBetted?address=${address}`,
+        config
       );
       setBetted(response.data.betted);
     } catch (error) {
@@ -61,8 +75,15 @@ const CardNext = () => {
 
   const fetchMinBet = async () => {
     try {
+      const config = {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+          "Content-Type": "application/json",
+        },
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_URL}/getMinimumBetAmount`
+        `${process.env.REACT_APP_URL}/getMinimumBetAmount`,
+        config
       );
       const minBetInWei = ethers.BigNumber.from(response.data.minBet);
       const minBetInEth = ethers.utils.formatEther(minBetInWei);
@@ -121,11 +142,18 @@ const CardNext = () => {
         setLoading(true);
         const { ethereum } = window;
         if (ethereum) {
+          const config = {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+              "Content-Type": "application/json",
+            },
+          };
           const provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
           const contract = new ethers.Contract(contractAddress, abi, signer);
           const epochResponse = await axios.get(
-            `${process.env.REACT_APP_URL}/currentEpoch`
+            `${process.env.REACT_APP_URL}/currentEpoch`,
+            config
           );
           const tx = await betFunction(contract, epochResponse);
           await tx.wait();

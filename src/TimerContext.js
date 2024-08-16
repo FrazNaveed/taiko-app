@@ -9,9 +9,17 @@ export const TimerProvider = ({ children }) => {
   useEffect(() => {
     const fetchTimeRemaining = async () => {
       try {
+        const config = {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+            "Content-Type": "application/json",
+          },
+        };
         const response = await axios.get(
-          `${process.env.REACT_APP_URL}/timeRemaining`
+          `${process.env.REACT_APP_URL}/timeRemaining`,
+          config
         );
+        console.log("timere", response.data);
         const timeInMilliseconds = Number(response.data.timeUntilNextEpoch); // Ensure it's a number
         if (isNaN(timeInMilliseconds) || timeInMilliseconds < 0) {
           throw new Error("Invalid data received from backend");
