@@ -19,8 +19,7 @@ export const TimerProvider = ({ children }) => {
           `${process.env.REACT_APP_URL}/timeRemaining`,
           config
         );
-        console.log("timere", response.data);
-        const timeInMilliseconds = Number(response.data.timeUntilNextEpoch); // Ensure it's a number
+        const timeInMilliseconds = Number(response.data.timeUntilNextEpoch);
         if (isNaN(timeInMilliseconds) || timeInMilliseconds < 0) {
           throw new Error("Invalid data received from backend");
         }
