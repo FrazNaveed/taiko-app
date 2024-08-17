@@ -92,6 +92,7 @@ const CardNext = () => {
       console.error("Error fetching minimum bet data:", error);
     }
   };
+
   const openModal = (type) => {
     setBetType(type);
     setIsModalOpen(true);
@@ -105,7 +106,8 @@ const CardNext = () => {
     setLoading(false);
     setTxStatus(null);
     setTxHash("");
-    window.location.reload();
+    fetchPrizePool(); // Refresh prize pool data
+    fetchBettedStatus(walletAddress); // Refresh betted status
   };
 
   const handleBetAmountChange = (event) => {
@@ -157,13 +159,10 @@ const CardNext = () => {
           );
 
           const tx = await betFunction(contract, epochResponse);
-          if (tx) {
-            await tx.wait();
-            setTxStatus("success");
-            setTxHash(tx.hash);
-          } else {
-            throw new Error("Transaction object is undefined.");
-          }
+          await tx.wait();
+          setTxStatus("success");
+          setTxHash(tx.hash);
+          console.log(tx);
         }
       } catch (err) {
         console.error("Error placing bet:", err);
@@ -177,18 +176,18 @@ const CardNext = () => {
   };
 
   const betBull = () =>
-    placeBet((contract, epochResponse) => {
-      contract.betBull(epochResponse.data.currentEpoch + 1, {
+    placeBet(async (contract, epochResponse) => {
+      return await contract.betBull(epochResponse.data.currentEpoch + 1, {
         value: ethers.utils.parseEther(betAmount),
       });
     });
 
   const betBear = () =>
-    placeBet((contract, epochResponse) =>
-      contract.betBear(epochResponse.data.currentEpoch + 1, {
+    placeBet(async (contract, epochResponse) => {
+      return await contract.betBear(epochResponse.data.currentEpoch + 1, {
         value: ethers.utils.parseEther(betAmount),
-      })
-    );
+      });
+    });
 
   return (
     <div className="card">
