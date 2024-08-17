@@ -16,10 +16,10 @@ export const TimerProvider = ({ children }) => {
           },
         };
         const response = await axios.get(
-          `${process.env.REACT_APP_URL}/timeRemaining`,
+          `${process.env.REACT_APP_URL}/getCurrentEpochAndTime`,
           config
         );
-        const timeInMilliseconds = Number(response.data.timeUntilNextEpoch);
+        const timeInMilliseconds = Number(response.data.timeRemaining);
         if (isNaN(timeInMilliseconds) || timeInMilliseconds < 0) {
           throw new Error("Invalid data received from backend");
         }

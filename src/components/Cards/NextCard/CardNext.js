@@ -43,7 +43,7 @@ const CardNext = () => {
         },
       };
       const response = await axios.get(
-        `${process.env.REACT_APP_URL}/prizePool`,
+        `${process.env.REACT_APP_URL}/getPrizePool`,
         config
       );
       const prizePoolInWei = response.data.prizePool;
@@ -152,34 +152,40 @@ const CardNext = () => {
           const signer = provider.getSigner();
           const contract = new ethers.Contract(contractAddress, abi, signer);
           const epochResponse = await axios.get(
-            `${process.env.REACT_APP_URL}/currentEpoch`,
+            `${process.env.REACT_APP_URL}/getCurrentEpochAndTime`,
             config
           );
+
           const tx = await betFunction(contract, epochResponse);
-          await tx.wait();
-          setTxStatus("success");
-          setTxHash(tx.hash);
+          if (tx) {
+            await tx.wait();
+            setTxStatus("success");
+            setTxHash(tx.hash);
+          } else {
+            throw new Error("Transaction object is undefined.");
+          }
         }
       } catch (err) {
         console.error("Error placing bet:", err);
         setTxStatus("failure");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     } else {
       setError(`Amount must be at least ${minBet}`);
     }
   };
 
   const betBull = () =>
-    placeBet((contract, epochResponse) =>
-      contract.betBull(parseInt(epochResponse.data.epoch) + 1, {
+    placeBet((contract, epochResponse) => {
+      contract.betBull(epochResponse.data.currentEpoch + 1, {
         value: ethers.utils.parseEther(betAmount),
-      })
-    );
+      });
+    });
 
   const betBear = () =>
     placeBet((contract, epochResponse) =>
-      contract.betBear(parseInt(epochResponse.data.epoch) + 1, {
+      contract.betBear(epochResponse.data.currentEpoch + 1, {
         value: ethers.utils.parseEther(betAmount),
       })
     );
