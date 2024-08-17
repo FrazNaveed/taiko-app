@@ -35,6 +35,9 @@ export const TimerProvider = ({ children }) => {
       setTimeRemaining((prev) => {
         if (prev <= 1000) {
           fetchTimeRemaining();
+          window.alert(
+            "Timer expired. New round started. Reload the page before betting"
+          );
           return 0;
         }
         return Math.max(prev - 1000, 0);
